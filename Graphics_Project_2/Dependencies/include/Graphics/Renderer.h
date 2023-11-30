@@ -45,6 +45,7 @@ private :
 
 
 	glm::vec3 backGroundColor = glm::vec3(0.1f, 0.3f, 0.4f);
+	glm::vec3 normalsScale = glm::vec3(0.001f, 0.1f, 0.001f);
 
 	float outlineScaleValue = 0.05f;
 
@@ -77,5 +78,7 @@ public:
 	void Draw();
 	void DrawOutline();
 	void SortBlendModels();
+	const glm::vec3&  GetNormalsScale();
+	void SetNormalsLineScale(const glm::vec3& scale);
 };
 

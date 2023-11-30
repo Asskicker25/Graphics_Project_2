@@ -198,3 +198,13 @@ void Renderer::SortBlendModels()
 	std::sort(blendModelAndShaders.begin(), blendModelAndShaders.end(), compareDistance);
 }
 
+const glm::vec3& Renderer::GetNormalsScale()
+{
+	return this->normalsScale;
+}
+
+void Renderer::SetNormalsLineScale(const glm::vec3& scale)
+{
+	this->normalsScale = scale;
+}
+

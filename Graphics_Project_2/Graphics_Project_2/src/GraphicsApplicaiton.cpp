@@ -1,7 +1,11 @@
 #include "GraphicsApplicaiton.h"
 
+
+
 void GraphicsApplicaiton::SetUp()
 {
+
+	renderer.SetNormalsLineScale(glm::vec3(0.01, 3.0, 0.01));
 
 #pragma region Shader
 
@@ -61,6 +65,7 @@ void GraphicsApplicaiton::SetUp()
 
 #pragma region Models
 
+	int index = 0;
 
 	for (ModelData* modelData : listOfModels)
 	{
@@ -71,7 +76,7 @@ void GraphicsApplicaiton::SetUp()
 			BaseMaterial* material = modelData->model->meshes[matData->index]->material;
 
 			if (modelData->shader == "Default" || modelData->shader == "AlphaBlend" || modelData->shader == "ColorMask" ||
-				modelData->shader == "UVAnim")
+				modelData->shader == "UVAnim" || modelData->shader == "AlphaCutOut")
 			{
 				material->AsMaterial()->SetBaseColor(matData->color);
 				material->AsMaterial()->textureTiling = matData->tiling;
@@ -103,8 +108,14 @@ void GraphicsApplicaiton::SetUp()
 		{
 			renderer.AddModel(modelData->model, uvAnimationShader);
 		}
+		else if (modelData->shader == "AlphaCutOut")
+		{
+			renderer.AddModel(modelData->model, &alphaCutOutShader);
+		}
 
+		SetSelectedModelIndex(index);
 
+		index++;
 	}
 
 #pragma endregion
@@ -158,8 +169,54 @@ void GraphicsApplicaiton::ProcessInput(GLFWwindow* window)
 
 void GraphicsApplicaiton::KeyCallBack(GLFWwindow* window, int& key, int& scancode, int& action, int& mods)
 {
+	if (action == GLFW_PRESS)
+	{
+		if (key == GLFW_KEY_RIGHT)
+		{
+			SetSelectedModelIndex(++selectedIndex);
+		}
+		else if (key == GLFW_KEY_LEFT)
+		{
+			SetSelectedModelIndex(--selectedIndex);
+		}
+		else if (key == GLFW_KEY_N)
+		{
+			renderer.showNormals = !renderer.showNormals;
+		}
+		else if (key == GLFW_KEY_1)
+		{
+			renderer.renderMode = SHADED;
+		}
+		else if (key == GLFW_KEY_2)
+		{
+			renderer.renderMode = WIREFRAME;
+		}
+		else if (key == GLFW_KEY_3)
+		{
+			renderer.renderMode = SHADED_WIREFRAME;
+		}
+		else if (key == GLFW_KEY_UP)
+		{
+			renderer.selectedModel = nullptr;
+		}
+	}
 }
 
 void GraphicsApplicaiton::MouseButtonCallback(GLFWwindow* window, int& button, int& action, int& mods)
 {
+}
+
+void GraphicsApplicaiton::SetSelectedModelIndex(int index)
+{
+	if (index >= listOfModels.size())
+	{
+		index = 0;
+	}
+	else if (index <= 0)
+	{
+		index = listOfModels.size() - 1;
+	}
+
+	selectedIndex = index;
+	renderer.selectedModel = listOfModels[selectedIndex]->model;
 }

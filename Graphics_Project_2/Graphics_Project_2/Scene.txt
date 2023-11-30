@@ -5,68 +5,84 @@ Rotation : { -10 , 90 , 0.0 }
 //Table Light
 #Light 
 Type : { Directional }
-Color : { 1.0 , 1.0 , 1.0 , 1.0}
-Position : { 0.0 , 0.0 , 0.0 }
-Rotation : { 0.0 , 0.0 , 0.0 }
-Intensity : { 1.0 }
-Radius : { 1.0 }
+Color : { 1.0 , 1.0 , 1.0 , 1.0 }
+Intensity : { 0.05 }
 
-////Clock Light
-//#Light 
-//Type : { Point }
-//Color : { 0.2 , 0.8 , 0.9 , 1.0 }
-//Position : { 18.0 , 10.0 , -12.0 }
-//Rotation : { 0.0 , 0.0 , 0.0 }
-//Intensity : { 0.5 }
-//Radius : { 0.3 }
-//
-////Fireplace Light
-//#Light 
-//Type : { Point }
-//Color : { 0.9 , 0.4 , 0.3 , 1.0 }
-//Position : { 20.0 , 5.0 , 0.0 }
-//Rotation : { 0.0 , 0.0 , 0.0 }
-//Intensity : { 1.5 }
-//Radius : { 0.1 }
-//
-////PhotoFrame Light
-//#Light 
-//Type : { Point }
-//Color : { 0.9 , 0.25 , 0.9 , 1.0 }
-//Position : { -18.0 , 10.0 , -20.0 }
-//Rotation : { 0.0 , 0.0 , 0.0 }
-//Intensity : { 0.5 }
-//Radius : { 0.2 }
-//
-////Red Light
-//#Light 
-//Type : { Spot }
-//Color : { 1.0 , 0.0 , 0.0 , 1.0 }
-//Position : { 21.0 , 18.0 , -22.0 }
-//Rotation : { 90.0 , 180.0 , 0.0 }
-//Intensity : { 1.0 }
-//Radius : { 1.0 }
-//InnerOuterAngle : { 15.0, 25.0 }
-//
-////Green Light
-//#Light 
-//Type : { Spot }
-//Color : { 0.0 , 1.0 , 0.0 , 1.0 }
-//Position : { -18.0 , 17.0 , -10.0 }
-//Rotation : { 60.0 , 180.0 , 0.0 }
-//Intensity : { 2.0 }
-//Radius : { 3.0 }
-//InnerOuterAngle : { 20.0, 25.0 }
-//
-////Blue Light
-//#Light 
-//Type : { Spot }
-//Color : { 0.0 , 0.0 , 1.0, 1.0 }
-//Position : { 0.0 , 15.0 , 8.0 }
-//Rotation : { 25.0 , 180.0 , 0.0 }
-//Intensity : { 1.0 }
-//Radius : { 1.0 }
-//InnerOuterAngle : { 10.0, 15.0 }
+//Table Light
+#Light 
+Type : { Spot }
+Color : { 1.0 , 1.0 , 1.0 , 1.0 }
+Position : { -40.0 , 65.0 , -80.0 }
+Rotation : { -90.0 , 0 , 0.0 }
+Intensity : { 3.0 }
+Radius : { 10.0 }
+InnerOuterAngle : { 20.0, 35 }
+
+//Hat Light
+#Light 
+Type : { Point }
+Color : { 0.2 , 0.8 , 0.9 , 1.0 }
+Position : { -83.0 , 40.0 , -10.0 }
+Rotation : { 0.0 , 0.0 , 0.0 }
+Intensity : { 0.5 }
+Radius : { 10 }
+
+//Pumpkin Light
+#Light 
+Type : { Point }
+Color : { 1.0 , 0.9 , 0.5 , 1.0 }
+Position : { -116.0 , 45.0 , -55.0 }
+Rotation : { 0.0 , 0.0 , 0.0 }
+Intensity : { 0.5 }
+Radius : { 10 }
+
+//Pumpkin Light
+#Light 
+Type : { Point }
+Color : { 1.0 , 0.9 , 0.5 , 1.0 }
+Position : { -116.0 , 45.0 , -15.0 }
+Rotation : { 0.0 , 0.0 , 0.0 }
+Intensity : { 0.5 }
+Radius : { 10 }
+
+//Sink Light
+#Light 
+Type : { Spot }
+Color : { 1.0 , 1.0 , 1.0 , 1.0 }
+Position : { -43.0 , 75.0 , 5.0 }
+Rotation : { -90.0 , 0.0 , 0.0 }
+Intensity : { 5 }
+Radius : { 5 }
+InnerOuterAngle : { 15, 25 }
+
+//Stove Light
+#Light 
+Type : { Point }
+Color : { 1.0 , 0.6 , 0.2 , 1.0 }
+Position : { 0.0 , 40.0 , -5.0 }
+Rotation : { 0.0 , 0.0 , 0.0 }
+Intensity : { 0.8 }
+Radius : { 10 }
+
+//Plant Light
+#Light 
+Type : { Point }
+Color : { 1.0 , 1.0 , 1.0 , 1.0 }
+Position : { 30.0 , 20.0 , -5.0 }
+Rotation : { 0.0 , 180.0 , 0.0 }
+Intensity : { 0.3 }
+Radius : { 5 }
+
+
+//Plant Light
+#Light 
+Type : { Spot }
+Color : { 0.8 , 0.2 , 0.8 , 1.0 }
+Position : { 50.0 , 10.0 , -50.0 }
+Rotation : { 0.0 , 180.0 , 0.0 }
+Intensity : { 5 }
+Radius : { 10 }
+InnerOuterAngle : { 30, 40 }
 
 #Model
 Model path : { Assets/Models/FallEggs/WallAndRoof.fbx }
@@ -106,7 +122,6 @@ Shader : { Default }
 
 #Model
 Model path : { Assets/Models/FallEggs/Window.fbx }
-MaterialDiffuse : { Assets/Models/FallEggs/Window.fbm/Texture transparent.png }
 Model Id : { WindowGlass }
 Position : { -46.53 , 50.37 , 10.63 }
 Rotation : { -90.0 , 0.0 , 0.0 }
@@ -180,3 +195,167 @@ Scale : { 1 , 1 , 1 }
 Shader : { AlphaBlend }
 MaterialCol : [0] { 1.0 , 1.0, 1.0, 1.0 }
 MaterialCol : [1] { 0.53 , 0.7, 0.72, 0.5 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Piiza.fbx }
+Model Id : { Pizza }
+Position : { -115.06 , 30.48 , 0.2 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+
+#Model
+Model path : { Assets/Models/FallEggs/Door.fbx }
+Model Id : { Door }
+Position : { -129, 38.85 ,-125 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+#Model
+Model path : { Assets/Models/FallEggs/Table.fbx }
+Model Id : { Table }
+Position : { -35.9, 28.5 ,-81.1 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+#Model
+Model path : { Assets/Models/FallEggs/Chair.fbx }
+Model Id : { Chair }
+Position : { -34.35, 16.49 ,-106 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+#Model
+Model path : { Assets/Models/FallEggs/Plant.fbx }
+Model Id : { Plant }
+Position : { 32.58, 10.2 , -6.2 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 70 , 70 , 70 }
+Shader : { AlphaCutOut }
+MaterialCol : [2] { 0.9 , 0.1, 0.0, 1.0 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Plant.fbx }
+Model Id : { Plant }
+Position : { 60.58, 10.2 , -6.2 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 70 , 70 , 70 }
+Shader : { Default }
+MaterialCol : [2] { 0.9 , 0.1, 0.0, 1.0 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Eggs.fbx }
+Model Id : { Eggs }
+Position : { -17, 31.2 , 5.2 }
+Rotation : { 00 , 0.0 , 0.0 }
+Scale : { 1 , 1 ,1 }
+Shader : { Default }
+
+#Model
+Model path : { Assets/Models/FallEggs/Jar.fbx }
+Model Id : { Jar }
+Position : { -47.9, 38.9 , -82.69 }
+Rotation : { 0 , 0.0 , 0.0 }
+Scale : { 1 , 1 ,1 }
+Shader : { AlphaBlend }
+MaterialCol : [0] { 1.0 , 1.0, 1.0, 1.0 }
+MaterialCol : [1] { 1.0  , 1.0 ,1.0 , 0.9 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Jar.fbx }
+Model Id : { Jar }
+Position : { -40.9, 38.9 , -82.69 }
+Rotation : { 0 , 0.0 , 0.0 }
+Scale : { 1 , 1 ,1 }
+Shader : { AlphaBlend }
+MaterialCol : [0] { 1.0 , 1.0, 1.0, 1.0 }
+MaterialCol : [1] { 1.0 , 1.0 , 1.0 , 0.6 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Jar.fbx }
+Model Id : { Jar }
+Position : { -33.9, 38.9 , -82.69 }
+Rotation : { 0 , 0.0 , 0.0 }
+Scale : { 1 , 1 ,1 }
+Shader : { AlphaBlend }
+MaterialCol : [0] { 1.0 , 1.0, 1.0, 1.0 }
+MaterialCol : [1] { 1.0 , 1.0 , 1.0 , 0.25 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Eyes.fbx }
+Model Id : { Eyes }
+Position : { -47.9, 35.1 ,-82.6 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+#Model
+Model path : { Assets/Models/FallEggs/Eyes.fbx }
+Model Id : { Eyes }
+Position : { -40.9, 35.1 ,-82.6 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+#Model
+Model path : { Assets/Models/FallEggs/Eyes.fbx }
+Model Id : { Eyes }
+Position : { -33.9, 35.1 ,-82.6 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+#Model
+Model path : { Assets/Models/FallEggs/Pumpkin.fbx }
+Model Id : { Pumpkin }
+Position : { -116.1, 35.2 ,-16.2 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Pumpkin.fbx }
+Model Id : { Pumpkin }
+Position : { -116.1, 35.2 ,-36.2 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { ColorMask }
+MaterialCol : [0] { 0.0 , 0.9, 0.0, 1.0 }
+MaterialMask : [0] { Assets/Models/FallEggs/Pumpkin.fbm/PumpkinMask.png }
+
+#Model
+Model path : { Assets/Models/FallEggs/Pumpkin.fbx }
+Model Id : { Pumpkin }
+Position : { -116.1, 35.2 ,-56.2 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { AlphaCutOut }
+MaterialMask : [0] { Assets/Models/FallEggs/Pumpkin.fbm/PumpkinMask.png }
+
+#Model
+Model path : { Assets/Models/FallEggs/Vent.fbx }
+Model Id : { Vent }
+Position : { 0, 68 , 3.4 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+
+#Model
+Model path : { Assets/Models/FallEggs/Tap.fbx }
+Model Id : { Tap }
+Position : { -44.5, 33.6 , 5.7 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+
+
+#Model
+Model path : { Assets/Models/FallEggs/Water.fbx }
+Model Id : { Water }
+Position : { -44.5, 27 , 0 }
+Rotation : { -90 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader { UVAnim }
+
+

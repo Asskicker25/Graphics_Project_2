@@ -77,6 +77,7 @@ void Mesh::DrawNormals(Shader* shader, glm::vec3 color, glm::mat4 transformMatri
 	shader->Bind();
 	shader->SetUniform3f("solidColor", color.x, color.y, color.z);
 
+
 	for (int i = 0; i < triangles.size(); i++)
 	{
 		Model* model = renderer->debugCubes->DrawDebugModel();
@@ -84,7 +85,7 @@ void Mesh::DrawNormals(Shader* shader, glm::vec3 color, glm::mat4 transformMatri
 		glm::vec3 transformedCenter = transformMatrix * glm::vec4(triangles[i].center, 1.0f);
 
 		model->transform.SetPosition(transformedCenter);
-		model->transform.SetScale(glm::vec3(0.001f, 0.1f, 0.001f));
+		model->transform.SetScale(renderer->GetNormalsScale());
 
 		model->transform.SetOrientationFromDirections(transformMatrix * glm::vec4(triangles[i].normal, 0.0f),
 			transformMatrix * glm::vec4(triangles[i].tangent,0.0f));

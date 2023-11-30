@@ -109,22 +109,13 @@ void main()
 	
 	vec4 result = CalculateLightContrib(normalizedNormal,FragPos,viewDir);
 	
-    //color = vec4(specular, 1.0);
-	
-	
-	
-	
-	//color = vec4(diffuseColor.w);
-	
 	if(alphaCutOut.x == 1)
 	{
 		result.w = 1.0;
 	}
 	
-	
-	
 	color = result;
-	//color = vec4(texColor.xyz,1.0);
+
 	
 };
 

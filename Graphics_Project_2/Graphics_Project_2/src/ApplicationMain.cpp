@@ -65,10 +65,6 @@ void ReadFile(const std::string& filePath)
 				application.listOfModels.push_back(modelData);
 			}
 
-			delete model;
-			delete light;
-			delete modelData;
-
 			model = new Model();
 			light = new Light();
 			modelData = nullptr;
@@ -173,7 +169,7 @@ void ReadFile(const std::string& filePath)
 			glm::vec4 atten = glm::vec4(0.0f);
 
 			atten.x = 1.0f;
-			atten.z = 0.02;
+			atten.z = 0.01;
 			atten.y = -atten.z * GetFloat(line);
 
 			light->attenuation = atten;
