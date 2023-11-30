@@ -54,9 +54,12 @@ class GraphicsApplicaiton : public ApplicationWindow
 private:
 	const std::string& lightModelPath = "Assets/Models/DefaultSphere.fbx";
 
+	float timeElapsed = 0;
+
 public:
 
 	Shader* colorMaskShader;
+	Shader* uvAnimationShader;
 
 	std::vector<ModelData*> listOfModels;
 	std::vector<Model*> listOflightModels;

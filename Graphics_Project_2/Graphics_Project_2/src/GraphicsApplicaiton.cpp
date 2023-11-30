@@ -10,6 +10,12 @@ void GraphicsApplicaiton::SetUp()
 	colorMaskShader->applyInverseModel = true;
 	Debugger::Print("ColorMaskShaderID : ", colorMaskShader->GetShaderId());
 
+
+	uvAnimationShader = new Shader("res/Shader/UVAnimationShader.shader");
+	uvAnimationShader->blendMode = OPAQUE;
+	uvAnimationShader->applyInverseModel = true;
+	Debugger::Print("UvAnimationShader Shader Id : ", uvAnimationShader->GetShaderId());
+
 #pragma endregion
 
 
@@ -48,6 +54,7 @@ void GraphicsApplicaiton::SetUp()
 	}
 
 	lightManager.AddShader(colorMaskShader);
+	lightManager.AddShader(uvAnimationShader);
 
 #pragma endregion
 
@@ -63,7 +70,8 @@ void GraphicsApplicaiton::SetUp()
 		{
 			BaseMaterial* material = modelData->model->meshes[matData->index]->material;
 
-			if (modelData->shader == "Default" || modelData->shader == "AlphaBlend" || modelData->shader == "ColorMask")
+			if (modelData->shader == "Default" || modelData->shader == "AlphaBlend" || modelData->shader == "ColorMask" ||
+				modelData->shader == "UVAnim")
 			{
 				material->AsMaterial()->SetBaseColor(matData->color);
 				material->AsMaterial()->textureTiling = matData->tiling;
@@ -91,6 +99,10 @@ void GraphicsApplicaiton::SetUp()
 		{
 			renderer.AddModel(modelData->model, colorMaskShader);
 		}
+		else if (modelData->shader == "UVAnim")
+		{
+			renderer.AddModel(modelData->model, uvAnimationShader);
+		}
 
 
 	}
@@ -101,14 +113,30 @@ void GraphicsApplicaiton::SetUp()
 
 void GraphicsApplicaiton::PreRender()
 {
+
+#pragma region Shader
+
 	colorMaskShader->Bind();
 	colorMaskShader->SetUniformMat("projection", camera->GetMatrix());
 	colorMaskShader->SetUniformMat("view", view);
 	colorMaskShader->SetUniform3f("viewPos", camera->cameraPos.x, camera->cameraPos.y, camera->cameraPos.z);
+
+	uvAnimationShader->Bind();
+	uvAnimationShader->SetUniformMat("projection", camera->GetMatrix());
+	uvAnimationShader->SetUniformMat("view", view);
+	uvAnimationShader->SetUniform3f("viewPos", camera->cameraPos.x, camera->cameraPos.y, camera->cameraPos.z);
+
+	uvAnimationShader->SetUniform1f("time", timeElapsed);
+
+#pragma endregion
+
+
+
 }
 
 void GraphicsApplicaiton::PostRender()
 {
+	timeElapsed += deltaTime;
 }
 
 void GraphicsApplicaiton::ProcessInput(GLFWwindow* window)

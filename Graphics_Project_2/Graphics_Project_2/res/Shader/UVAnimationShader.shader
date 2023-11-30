@@ -8,6 +8,7 @@ layout(location = 2) in vec2 texCoord;
 layout(location = 3) in vec4 vertexColor;
 
 out vec2 TexCoord;
+out vec2 TexCoordAnim;
 out vec3 Normal;
 out vec3 FragPos;
 out vec4 VertexColor;
@@ -25,7 +26,8 @@ void main()
 	gl_Position = projection * view * model * vec4(position, 1);
 	//TexCoord = texCoord;
 	
-	TexCoord = vec2(texCoord.x * textureTiling.x, texCoord.y * textureTiling.y) + vec2(0.1 * time, 0.2 * time);
+	TexCoord = vec2(texCoord.x * textureTiling.x, texCoord.y * textureTiling.y);
+	TexCoordAnim = TexCoord + vec2( texCoord.x + 0.2 * time, texCoord.y);
 	
 	vec4 worlNormal = inverseModel * vec4(normal, 1.0f);
 	Normal = normalize(worlNormal.xyz);
@@ -65,6 +67,7 @@ struct Light
 out vec4 color;
 
 in vec2 TexCoord;
+in vec2 TexCoordAnim;
 in vec3 Normal;
 in vec3 FragPos;
 in vec4 VertexColor;
@@ -96,11 +99,11 @@ uniform sampler2D texture_diffuse;
 uniform sampler2D texture_specular;
 uniform sampler2D texture_opacity;
 
-vec4 CalcDirLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 viewDir);
-vec4 CalcPointLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir);
-vec4 CalcSpotLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir);
+vec4 CalcDirLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 viewDir, vec2 texCoord);
+vec4 CalcPointLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir, vec2 texCoord);
+vec4 CalcSpotLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir, vec2 texCoord);
 
-vec4 CalculateLightContrib(vec3 normal, vec3 fragPos, vec3 viewDir );
+vec4 CalculateLightContrib(vec3 normal, vec3 fragPos, vec3 viewDir , vec2 texCoord);
 
 
 void main()
@@ -109,15 +112,21 @@ void main()
 	vec3 normalizedNormal = normalize(Normal.xyz);
 	vec3 viewDir = normalize(viewPos - FragPos);
 	
-	vec4 result = CalculateLightContrib(normalizedNormal,FragPos,viewDir);
+	float maskValue = texture(texture_opacity, TexCoord).r;
 	
-    //color = vec4(specular, 1.0);
+	vec4 result = vec4(0.0);
+	
+	if(maskValue < 0.5)
+	{
+		result = CalculateLightContrib(normalizedNormal,FragPos,viewDir,TexCoord);
+	}
+	else
+	{
+		result = CalculateLightContrib(normalizedNormal,FragPos,viewDir,TexCoordAnim);
+	}
 	
 	
-	
-	
-	//color = vec4(diffuseColor.w);
-	
+
 	if(alphaCutOut.x == 1)
 	{
 		result.w = 1.0;
@@ -132,17 +141,17 @@ void main()
 	
 	
 	color = result;
-	
+	//color = vec4(maskValue,maskValue,maskValue,1.0);
 };
 
 
-vec4 CalculateLightContrib(vec3 normal, vec3 fragPos, vec3 viewDir )
+vec4 CalculateLightContrib(vec3 normal, vec3 fragPos, vec3 viewDir , vec2 texCoord)
 {
 
 	vec4 result = vec4(0.0);
 	
 	//Tex Color
-	vec4 diffuseColor = texture(texture_diffuse, TexCoord);
+	vec4 diffuseColor = texture(texture_diffuse, texCoord);
 	
 	
 	vec4 texColor = diffuseColor * VertexColor * material.baseColor;
@@ -163,21 +172,21 @@ vec4 CalculateLightContrib(vec3 normal, vec3 fragPos, vec3 viewDir )
 		
 		if(type == POINT_LIGHT_TYPE)
 		{
-				result += CalcPointLight(lights[i], texColor, ambientColor, normal,FragPos, viewDir);
+				result += CalcPointLight(lights[i], texColor, ambientColor, normal,FragPos, viewDir, texCoord);
 		}
 		else if(type == SPOT_LIGHT_TYPE)
 		{
-			result += CalcSpotLight(lights[i], texColor, ambientColor, normal, FragPos, viewDir);
+			result += CalcSpotLight(lights[i], texColor, ambientColor, normal, FragPos, viewDir, texCoord);
 		}
 		else if(type == DIRECTIONAL_LIGHT_TYPE)
 		{
-			result += CalcDirLight(lights[i], texColor, ambientColor, normal, viewDir);
+			result += CalcDirLight(lights[i], texColor, ambientColor, normal, viewDir, texCoord);
 		}
 	}
 	
 	if(alphaCutOut.y == 1)
 	{
-		result.w = texture(texture_opacity, TexCoord).r;
+		result.w = texture(texture_opacity, texCoord).r;
 	}
 	else
 	{
@@ -188,7 +197,7 @@ vec4 CalculateLightContrib(vec3 normal, vec3 fragPos, vec3 viewDir )
 	return result;
 }
 
-vec4 CalcDirLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 viewDir)
+vec4 CalcDirLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 viewDir, vec2 texCoord)
 {
 	//Diffuse
 	
@@ -199,7 +208,7 @@ vec4 CalcDirLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, ve
 	diffuse *= texColor;
 	
 	//Specular
-	vec4 specularColor = texture(texture_specular, TexCoord);
+	vec4 specularColor = texture(texture_specular, texCoord);
 	vec3 reflectDir = reflect(-lightDir,normal);
 	
 	float specularValue = pow(max(dot(reflectDir, viewDir),0.0),material.shininess);
@@ -210,7 +219,7 @@ vec4 CalcDirLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, ve
 }
 
 
-vec4 CalcPointLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec4 CalcPointLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir, vec2 texCoord)
 {
 	//Attenuation 
 	// x = constant, y = linear, z = quadratic, w = DistanceCutOff
@@ -229,7 +238,7 @@ vec4 CalcPointLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, 
 	diffuse *= texColor * attenuation;
 	
 	//Specular
-	vec4 specularColor = texture(texture_specular, TexCoord);
+	vec4 specularColor = texture(texture_specular, texCoord);
 	vec3 reflectDir = reflect(-lightDir,normal);
 	
 	float specularValue = pow(max(dot(reflectDir, viewDir),0.0),material.shininess);
@@ -240,7 +249,7 @@ vec4 CalcPointLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, 
 }
 
 
-vec4 CalcSpotLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec4 CalcSpotLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, vec3 fragPos, vec3 viewDir, vec2 texCoord)
 {
 	
 	//Attenuation 
@@ -270,7 +279,7 @@ vec4 CalcSpotLight(Light light, vec4 texColor, vec4 ambientColor, vec3 normal, v
 	
 	
 	//Specular
-	vec4 specularColor = texture(texture_specular, TexCoord);
+	vec4 specularColor = texture(texture_specular, texCoord);
 	vec3 reflectDir = reflect(-lightDir,normal);
 	
 	float specularValue = pow(max(dot(reflectDir, viewDir),0.0),material.shininess);

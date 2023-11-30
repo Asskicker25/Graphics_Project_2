@@ -138,12 +138,19 @@ MaterialMask : [0] { Assets/Models/FallEggs/Fridge.fbm/Star_alpha_texture.jpg }
 #Model
 Model path : { Assets/Models/FallEggs/Hat.fbx }
 Model Id : { Hat }
+Position : { -75.64 , 32.37 , -3.5 }
+Rotation : { -90.0 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { UVAnim }
+
+#Model
+Model path : { Assets/Models/FallEggs/Hat.fbx }
+Model Id : { Hat }
 Position : { -89.64 , 32.37 , -3.5 }
 Rotation : { -90.0 , 0.0 , 0.0 }
 Scale : { 100 , 100 , 100 }
-Shader : { Default }
-//MaterialCol : [0] { 1.0 ,0.0, 0.0, 1.0 }
-//MaterialMask : [0] { Assets/Models/FallEggs/Fridge.fbm/Star_alpha_texture.jpg }
+Shader : { UVAnim }
+MaterialMask : [0] { Assets/Models/FallEggs/Hat.fbm/HatAnimMask.jpg }
 
 
 #Model
