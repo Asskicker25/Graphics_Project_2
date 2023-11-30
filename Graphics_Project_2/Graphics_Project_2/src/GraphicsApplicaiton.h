@@ -9,6 +9,7 @@ struct MaterialData
 	glm::vec2 tiling;
 
 	std::string diffusePath;
+	std::string maskPath;
 
 	MaterialData(int index)
 	{
@@ -16,6 +17,7 @@ struct MaterialData
 		color = glm::vec4(1.0);
 		tiling = glm::vec2(1.0);
 		diffusePath = "";
+		maskPath = "";
 	}
 };
 
@@ -53,6 +55,8 @@ private:
 	const std::string& lightModelPath = "Assets/Models/DefaultSphere.fbx";
 
 public:
+
+	Shader* colorMaskShader;
 
 	std::vector<ModelData*> listOfModels;
 	std::vector<Model*> listOflightModels;

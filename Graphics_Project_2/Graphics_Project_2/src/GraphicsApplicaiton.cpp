@@ -3,6 +3,16 @@
 void GraphicsApplicaiton::SetUp()
 {
 
+#pragma region Shader
+
+	colorMaskShader = new Shader("res/Shader/ColorMaskShader.shader");
+	colorMaskShader->blendMode = OPAQUE;
+	colorMaskShader->applyInverseModel = true;
+	Debugger::Print("ColorMaskShaderID : ", colorMaskShader->GetShaderId());
+
+#pragma endregion
+
+
 	camera->InitializeCamera(PERSPECTIVE, windowWidth, windowHeight, 0.1f, 300.0f, 65.0f);
 	camera->cameraPos = cameraPos;
 	camera->cameraPitch = cameraPitch;
@@ -37,8 +47,8 @@ void GraphicsApplicaiton::SetUp()
 		lightManager.AddLight(*listOfLights[i]);
 	}
 
+	lightManager.AddShader(colorMaskShader);
 
-	lightManager.AddShader(defShader);
 #pragma endregion
 
 
@@ -53,13 +63,18 @@ void GraphicsApplicaiton::SetUp()
 		{
 			BaseMaterial* material = modelData->model->meshes[matData->index]->material;
 
-			if (modelData->shader == "Default" || modelData->shader == "AlphaBlend")
+			if (modelData->shader == "Default" || modelData->shader == "AlphaBlend" || modelData->shader == "ColorMask")
 			{
 				material->AsMaterial()->SetBaseColor(matData->color);
 				material->AsMaterial()->textureTiling = matData->tiling;
 				if (matData->diffusePath != "")
 				{
 					material->AsMaterial()->diffuseTexture->LoadTexture(matData->diffusePath);
+				}
+				if (matData->maskPath != "")
+				{
+					material->AsMaterial()->alphaMask->LoadTexture(matData->maskPath);
+					material->AsMaterial()->useMaskTexture = true;
 				}
 			}
 		}
@@ -72,6 +87,10 @@ void GraphicsApplicaiton::SetUp()
 		{
 			renderer.AddModel(modelData->model, &alphaBlendShader);
 		}
+		else if (modelData->shader == "ColorMask")
+		{
+			renderer.AddModel(modelData->model, colorMaskShader);
+		}
 
 
 	}
@@ -82,6 +101,10 @@ void GraphicsApplicaiton::SetUp()
 
 void GraphicsApplicaiton::PreRender()
 {
+	colorMaskShader->Bind();
+	colorMaskShader->SetUniformMat("projection", camera->GetMatrix());
+	colorMaskShader->SetUniformMat("view", view);
+	colorMaskShader->SetUniform3f("viewPos", camera->cameraPos.x, camera->cameraPos.y, camera->cameraPos.z);
 }
 
 void GraphicsApplicaiton::PostRender()

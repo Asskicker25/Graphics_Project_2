@@ -130,7 +130,46 @@ Model Id : { Fridge }
 Position : { -108.6 , 35.19 , -73.51 }
 Rotation : { -90.0 , 0.0 , 0.0 }
 Scale : { 100 , 100 , 100 }
+Shader : { ColorMask }
+MaterialCol : [0] { 1.0 ,0.0, 0.0, 1.0 }
+MaterialMask : [0] { Assets/Models/FallEggs/Fridge.fbm/Star_alpha_texture.jpg }
+
+
+#Model
+Model path : { Assets/Models/FallEggs/Hat.fbx }
+Model Id : { Hat }
+Position : { -89.64 , 32.37 , -3.5 }
+Rotation : { -90.0 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
 Shader : { Default }
-MaterialCol : [0] { 1.0 ,1.0, 1.0, 1.0 }
+//MaterialCol : [0] { 1.0 ,0.0, 0.0, 1.0 }
+//MaterialMask : [0] { Assets/Models/FallEggs/Fridge.fbm/Star_alpha_texture.jpg }
 
 
+#Model
+Model path : { Assets/Models/FallEggs/Uppershelf.fbx }
+Model Id : { Uppershelf }
+Position : { -104.4 , 54.53 , -9.6 }
+Rotation : { -90.0 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+
+#Model
+Model path : { Assets/Models/FallEggs/UppershelfDoor.fbx }
+Model Id : { UppershelfDoor }
+Position : { -116.16 , 65.2 , -23.8 }
+Rotation : { -90.0 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
+
+
+#Model
+Model path : { Assets/Models/FallEggs/Oven.fbx }
+Model Id : { Oven }
+Position : { -88.7 , 52.28 , 0.66 }
+Rotation : { 0 , 0.0 , 0.0 }
+Scale : { 1 , 1 , 1 }
+Shader : { AlphaBlend }
+MaterialCol : [0] { 1.0 , 1.0, 1.0, 1.0 }
+MaterialCol : [1] { 0.53 , 0.7, 0.72, 0.5 }

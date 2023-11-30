@@ -310,6 +310,32 @@ void ReadFile(const std::string& filePath)
 
 #pragma endregion
 
+#pragma region MaterialMask
+
+
+		if (line.find("MaterialMask") != std::string::npos)
+		{
+			int materialIndex = GetMaterialIndex(line);
+
+			if (section == "Model")
+			{
+				MaterialData* matData = modelData->GetMaterialData(materialIndex);
+
+				if (matData == nullptr)
+				{
+					matData = new MaterialData(materialIndex);
+					modelData->materialData.push_back(matData);
+				}
+
+				matData->maskPath = GetString(line, true);
+
+			}
+
+			continue;
+		}
+
+#pragma endregion
+
 #pragma region Position
 
 		if (line.find("Position") != std::string::npos)

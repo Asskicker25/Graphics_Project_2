@@ -31,5 +31,7 @@
     <None Include="res\Shader\Shader.shader" />
     <None Include="res\Shader\SolidColorShader.shader" />
     <None Include="res\Shader\UVAnimationShader.shader" />
+    <None Include="res\Shader\ColorMaskShader.shader" />
+    <None Include="res\Shader\SkyBox.shader" />
   </ItemGroup>
 </Project>
