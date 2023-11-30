@@ -34,6 +34,8 @@ public:
 
 	bool useMaskTexture = false;
 
+	glm::vec2 textureTiling = glm::vec2(1.0f);
+
 	Material();
 	Material(const Material& material);
 	~Material();

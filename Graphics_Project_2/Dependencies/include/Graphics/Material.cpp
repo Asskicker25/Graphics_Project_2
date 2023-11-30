@@ -72,6 +72,8 @@ void Material::UpdateMaterial(Shader* shader)
 {
 	shader->Bind();
 
+	shader->SetUniform3f("textureTiling", this->textureTiling.x, this->textureTiling.y, 1.0f);
+
 	shader->SetUniform4f("material.baseColor", this->GetBaseColor().x, this->GetBaseColor().y,
 		this->GetBaseColor().z, this->GetBaseColor().w);
 

@@ -12,6 +12,8 @@ out vec3 Normal;
 out vec3 FragPos;
 out vec4 VertexColor;
 
+uniform vec3 textureTiling;  //x, y
+
 
 uniform mat4 projection;
 uniform mat4 view;
@@ -21,7 +23,7 @@ uniform mat4 inverseModel;
 void main()
 {
 	gl_Position = projection * view * model * vec4(position, 1);
-	TexCoord = texCoord;
+	TexCoord = vec2(texCoord.x * textureTiling.x, texCoord.y * textureTiling.y);
 	
 	vec4 worlNormal = inverseModel * vec4(normal, 1.0f);
 	Normal = normalize(worlNormal.xyz);

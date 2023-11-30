@@ -3,10 +3,14 @@
 void GraphicsApplicaiton::SetUp()
 {
 
-	camera->InitializeCamera(PERSPECTIVE,windowWidth,windowHeight,0.1f,300.0f,65.0f);
+	camera->InitializeCamera(PERSPECTIVE, windowWidth, windowHeight, 0.1f, 300.0f, 65.0f);
 	camera->cameraPos = cameraPos;
 	camera->cameraPitch = cameraPitch;
 	camera->cameraYaw = cameraYaw;
+	moveSpeed = 50;
+
+	renderer.renderMode = SHADED;
+	renderer.showNormals = false;
 
 	skyBox->meshes[0]->material = new SkyBoxMaterial();
 	SkyBoxMaterial* skyboxMat = skyBox->meshes[0]->material->AsSkyBoxMaterial();
@@ -40,10 +44,36 @@ void GraphicsApplicaiton::SetUp()
 
 #pragma region Models
 
-	for (int i = 0; i < listOfModels.size(); i++)
+
+	for (ModelData* modelData : listOfModels)
 	{
-		listOfModels[i]->LoadModel(modelPaths[i]);
-		renderer.AddModel(*listOfModels[i], defShader);
+		modelData->model->LoadModel(modelData->path);
+
+		for (MaterialData* matData : modelData->materialData)
+		{
+			BaseMaterial* material = modelData->model->meshes[matData->index]->material;
+
+			if (modelData->shader == "Default" || modelData->shader == "AlphaBlend")
+			{
+				material->AsMaterial()->SetBaseColor(matData->color);
+				material->AsMaterial()->textureTiling = matData->tiling;
+				if (matData->diffusePath != "")
+				{
+					material->AsMaterial()->diffuseTexture->LoadTexture(matData->diffusePath);
+				}
+			}
+		}
+
+		if (modelData->shader == "Default")
+		{
+			renderer.AddModel(modelData->model, &defShader);
+		}
+		else if (modelData->shader == "AlphaBlend")
+		{
+			renderer.AddModel(modelData->model, &alphaBlendShader);
+		}
+
+
 	}
 
 #pragma endregion

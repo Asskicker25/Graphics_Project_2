@@ -122,6 +122,10 @@ void ApplicationWindow::InitializeWindow(int windowWidth, int windowHeight)
 
 	renderer.Initialize();
 
+	lightManager.AddShader(defShader);
+	lightManager.AddShader(alphaBlendShader);
+	lightManager.AddShader(alphaCutOutShader);
+
 	camera->SetCameraHeight(windowHeight);
 	camera->SetCameraWidth(windowWidth);
 

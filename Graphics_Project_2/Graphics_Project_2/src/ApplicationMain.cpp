@@ -3,6 +3,12 @@
 void StartApplication(const std::string& filePath);
 void ReadFile(const std::string& filePath);
 
+std::vector<float> GetValues(std::string line);
+std::string GetString(std::string line, bool excludeSpace = false);
+int GetMaterialIndex(std::string line);
+float GetFloat(std::string line);
+bool GetBool(std::string line);
+
 GraphicsApplicaiton application;
 
 int main(int argc, char* argv[])
@@ -30,6 +36,7 @@ void ReadFile(const std::string& filePath)
 	std::string line;
 	std::string section;
 
+	ModelData* modelData = nullptr;
 	Model* model = nullptr;
 	Light* light = nullptr;
 
@@ -53,12 +60,18 @@ void ReadFile(const std::string& filePath)
 				application.listOfLights.push_back(light);
 				application.listOflightModels.push_back(model);
 			}
-			else if (model != nullptr)
+			else if (modelData != nullptr)
 			{
-				application.listOfModels.push_back(model);
+				application.listOfModels.push_back(modelData);
 			}
+
+			delete model;
+			delete light;
+			delete modelData;
+
 			model = new Model();
 			light = new Light();
+			modelData = nullptr;
 
 			section = "Light";
 			continue;
@@ -72,13 +85,14 @@ void ReadFile(const std::string& filePath)
 				application.listOfLights.push_back(light);
 				application.listOflightModels.push_back(model);
 			}
-			else if (model != nullptr)
+			else if (modelData != nullptr)
 			{
-				application.listOfModels.push_back(model);
+				application.listOfModels.push_back(modelData);
 			}
 
 			light = nullptr;
-			model = new Model();
+			model = nullptr;
+			modelData = new ModelData();
 			section = "Model";
 			continue;
 		}
@@ -91,19 +105,9 @@ void ReadFile(const std::string& filePath)
 #pragma region Modelpath
 		if (line.find("Model path") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
-
-			std::string result;
-			for (char c : line) {
-				if (c != ' ') {
-					result += c;
-				}
-			}
-
 			if (section == "Model")
 			{
-				application.modelPaths.push_back(result);
+				modelData->path = GetString(line, true);
 			}
 			continue;
 
@@ -113,38 +117,25 @@ void ReadFile(const std::string& filePath)
 #pragma region ModelId
 		if (line.find("Model Id") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
 
-			model->modelId = line;
+			modelData->model->modelId = GetString(line);
 			continue;
 
 		}
 #pragma endregion
 
+#pragma region Shader
+		if (line.find("Shader") != std::string::npos)
+		{
+			modelData->shader = GetString(line, true);
+		}
+
+#pragma endregion
+
 #pragma region Wireframe
 		if (line.find("Wireframe") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
-
-			model->modelId = line;
-
-			std::string result;
-			for (char c : line) {
-				if (c != ' ') {
-					result += c;
-				}
-			}
-
-			if (result == "true" || "True" || "TRUE")
-			{
-				model->isWireframe = true;
-			}
-			else
-			{
-				model->isWireframe = false;
-			}
+			modelData->model->isWireframe = GetBool(line);
 			continue;
 
 		}
@@ -154,18 +145,17 @@ void ReadFile(const std::string& filePath)
 
 		if (line.find("Type") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
+			line = GetString(line, true);
 
-			if (line == " Directional ")
+			if (line == "Directional")
 			{
 				light->lightType = LightType::Directional;
 			}
-			else if (line == " Spot ")
+			else if (line == "Spot")
 			{
 				light->lightType = LightType::Spot;
 			}
-			else if (line == " Point ")
+			else if (line == "Point")
 			{
 				light->lightType = LightType::Point;
 			}
@@ -179,27 +169,12 @@ void ReadFile(const std::string& filePath)
 
 		if (line.find("Radius") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
-
-			std::stringstream ss(line);
-			double value;
-			char comma;
-
-			std::vector<float> values;
-
-			while (ss >> value)
-			{
-				ss >> comma;
-
-				values.push_back((float)value);
-			}
 
 			glm::vec4 atten = glm::vec4(0.0f);
 
 			atten.x = 1.0f;
 			atten.z = 0.02;
-			atten.y = -atten.z * values[0];
+			atten.y = -atten.z * GetFloat(line);
 
 			light->attenuation = atten;
 
@@ -212,25 +187,9 @@ void ReadFile(const std::string& filePath)
 
 		if (line.find("InnerOuterAngle") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
-
-			std::stringstream ss(line);
-			double value;
-			char comma;
-
-			std::vector<float> values;
-
-			while (ss >> value)
-			{
-				ss >> comma;
-
-				values.push_back((float)value);
-			}
+			std::vector<float> values = GetValues(line);
 
 			glm::vec4 atten = glm::vec4(0.0f);
-
-
 
 			light->innerAngle = values[0];
 			light->outerAngle = values[1];
@@ -244,15 +203,7 @@ void ReadFile(const std::string& filePath)
 
 		if (line.find("Intensity") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
-
-			std::stringstream ss(line);
-			double value;
-
-			ss >> value;
-
-			light->intensity = value;
+			light->intensity = GetFloat(line);
 
 			continue;
 
@@ -264,21 +215,7 @@ void ReadFile(const std::string& filePath)
 
 		if (line.find("Color") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
-
-			std::stringstream ss(line);
-			double value;
-			char comma;
-
-			std::vector<float> values;
-
-			while (ss >> value)
-			{
-				ss >> comma;
-
-				values.push_back((float)value);
-			}
+			std::vector<float> values = GetValues(line);
 
 			if (section == "Light")
 			{
@@ -292,34 +229,108 @@ void ReadFile(const std::string& filePath)
 		}
 #pragma endregion
 
+#pragma region MaterialColor
+
+		if (line.find("MaterialCol") != std::string::npos)
+		{
+			int materialIndex = GetMaterialIndex(line);
+
+			std::vector<float> values = GetValues(line);
+
+			if (section == "Model")
+			{
+				MaterialData* matData = modelData->GetMaterialData(materialIndex);
+
+				if (matData == nullptr)
+				{
+					matData = new MaterialData(materialIndex);
+					modelData->materialData.push_back(matData);
+				}
+
+				matData->color = glm::vec4(values[0], values[1], values[2], values[3]);
+
+			}
+
+			continue;
+		}
+
+#pragma endregion
+
+#pragma region MaterialTiling
+
+
+		if (line.find("MaterialTiling") != std::string::npos)
+		{
+			int materialIndex = GetMaterialIndex(line);
+
+			std::vector<float> values = GetValues(line);
+
+			if (section == "Model")
+			{
+				MaterialData* matData = modelData->GetMaterialData(materialIndex);
+
+				if (matData == nullptr)
+				{
+					matData = new MaterialData(materialIndex);
+					modelData->materialData.push_back(matData);
+				}
+
+				matData->tiling = glm::vec2(values[0], values[1]);
+
+			}
+
+			continue;
+		}
+
+#pragma endregion
+
+#pragma region MaterialDiffuse
+
+
+		if (line.find("MaterialDiffuse") != std::string::npos)
+		{
+			int materialIndex = GetMaterialIndex(line);
+
+			if (section == "Model")
+			{
+				MaterialData* matData = modelData->GetMaterialData(materialIndex);
+
+				if (matData == nullptr)
+				{
+					matData = new MaterialData(materialIndex);
+					modelData->materialData.push_back(matData);
+				}
+
+				matData->diffusePath = GetString(line, true);
+
+			}
+
+			continue;
+		}
+
+#pragma endregion
+
 #pragma region Position
 
 		if (line.find("Position") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
-
-			std::stringstream ss(line);
-			double value;
-			char comma;
-
-			std::vector<float> values;
-
-			while (ss >> value)
-			{
-				ss >> comma;
-
-				values.push_back((float)value);
-			}
+			std::vector<float> values = GetValues(line);
 
 			if (section == "Camera")
 			{
-				application.cameraPos =  glm::vec3(values[0], values[1], values[2]);
-				//application.camera->cameraPos = glm::vec3(values[0], values[1], values[2]);
+				application.cameraPos = glm::vec3(values[0], values[1], values[2]);
 			}
 			else
 			{
-				model->transform.SetPosition(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+				if (section == "Light")
+				{
+					model->transform.SetPosition(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+				}
+				else
+				{
+					modelData->model->transform.SetPosition(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+				}
+
 			}
 
 			continue;
@@ -330,31 +341,24 @@ void ReadFile(const std::string& filePath)
 #pragma region Rotation
 		if (line.find("Rotation") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
+			std::vector<float> values = GetValues(line);
 
-			std::stringstream ss(line);
-			double value;
-			char comma;
-
-			std::vector<float> values;
-
-			while (ss >> value)
-			{
-				ss >> comma;
-
-				values.push_back((float)value);
-			}
 			if (section == "Camera")
 			{
 				application.cameraPitch = values[0];
 				application.cameraYaw = values[1];
-				/*application.camera->cameraPitch = values[0];
-				application.camera->cameraYaw = values[1];*/
+
 			}
 			else
 			{
-				model->transform.SetRotation(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+				if (section == "Light")
+				{
+					model->transform.SetRotation(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+				}
+				else
+				{
+					modelData->model->transform.SetRotation(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+				}
 			}
 			continue;
 		}
@@ -363,22 +367,17 @@ void ReadFile(const std::string& filePath)
 #pragma region Scale
 		if (line.find("Scale") != std::string::npos)
 		{
-			line.erase(0, line.find("{") + 1);
-			line.erase(line.find("}"));
+			std::vector<float> values = GetValues(line);
 
-			std::stringstream ss(line);
-			double value;
-			char comma;
-
-			std::vector<float> values;
-
-			while (ss >> value)
+			if (section == "Light")
 			{
-				ss >> comma;
-
-				values.push_back((float)value);
+				model->transform.SetScale(glm::vec3(glm::vec3(values[0], values[1], values[2])));
 			}
-			model->transform.SetScale(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+			else
+			{
+				modelData->model->transform.SetScale(glm::vec3(glm::vec3(values[0], values[1], values[2])));
+			}
+
 			continue;
 		}
 #pragma endregion
@@ -390,11 +389,92 @@ void ReadFile(const std::string& filePath)
 		application.listOfLights.push_back(light);
 		application.listOflightModels.push_back(model);
 	}
-	else if (model != nullptr)
+	else if (modelData != nullptr)
 	{
-		application.listOfModels.push_back(model);
+		application.listOfModels.push_back(modelData);
 	}
 
+}
+
+std::vector<float> GetValues(std::string line)
+{
+	line.erase(0, line.find("{") + 1);
+	line.erase(line.find("}"));
+
+	std::stringstream ss(line);
+	double value;
+	char comma;
+
+	std::vector<float> values;
+
+	while (ss >> value)
+	{
+		ss >> comma;
+
+		values.push_back((float)value);
+	}
+
+	return values;
+}
+
+std::string GetString(std::string line, bool excludeSpace)
+{
+
+	line.erase(0, line.find("{") + 1);
+	line.erase(line.find("}"));
+
+	if (excludeSpace)
+	{
+		std::string result;
+		for (char c : line) {
+			if (c != ' ') {
+				result += c;
+			}
+		}
+		return result;
+	}
+	else
+	{
+		return line;
+	}
+}
+
+int GetMaterialIndex(std::string line)
+{
+	int materialIndex;
+
+	size_t startBracket = line.find("[") + 1;
+	size_t endBracket = line.find("]");
+	std::string valueStr = line.substr(startBracket, endBracket - startBracket);
+	std::stringstream valueStream(valueStr);
+	valueStream >> materialIndex;
+
+	return materialIndex;
+}
+
+float GetFloat(std::string line)
+{
+	line.erase(0, line.find("{") + 1);
+	line.erase(line.find("}"));
+
+	std::stringstream ss(line);
+	double value;
+
+	ss >> value;
+
+	return value;
+}
+
+bool GetBool(std::string line)
+{
+	line = GetString(line, true);
+
+	if (line == "true" || "True" || "TRUE")
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void StartApplication(const std::string& filePath)

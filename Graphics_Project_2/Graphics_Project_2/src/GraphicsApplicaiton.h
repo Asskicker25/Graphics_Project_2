@@ -2,6 +2,50 @@
 
 #include <Graphics/ApplicationWindow.h>
 
+struct MaterialData
+{
+	int index;
+	glm::vec4 color;
+	glm::vec2 tiling;
+
+	std::string diffusePath;
+
+	MaterialData(int index)
+	{
+		this->index = index;
+		color = glm::vec4(1.0);
+		tiling = glm::vec2(1.0);
+		diffusePath = "";
+	}
+};
+
+struct ModelData
+{
+	Model* model;
+	std::string path;
+	std::string shader;
+	std::vector<MaterialData* > materialData;
+
+	ModelData()
+	{
+		model = new Model();
+		shader = "Default";
+	}
+
+	MaterialData* GetMaterialData(int index)
+	{
+		for (MaterialData* mat : materialData)
+		{
+			if (mat->index == index)
+				return mat;
+		}
+
+		return nullptr;
+	}
+};
+
+
+
 class GraphicsApplicaiton : public ApplicationWindow
 {
 
@@ -10,9 +54,8 @@ private:
 
 public:
 
-	std::vector<Model*> listOfModels;
+	std::vector<ModelData*> listOfModels;
 	std::vector<Model*> listOflightModels;
-	std::vector<std::string> modelPaths;
 	std::vector<Light*> listOfLights;
 
 	glm::vec3 cameraPos;
