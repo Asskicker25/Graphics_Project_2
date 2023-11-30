@@ -15,6 +15,8 @@
 
 #include "Material.h"
 #include "UnlitColorMaterial.h"
+#include "CubeMapTexture.h"
+#include "SkyBoxMaterial.h"
 
 class ApplicationWindow
 {
@@ -62,6 +64,9 @@ public:
 	Shader defShader;
 	Shader alphaBlendShader;
 	Shader alphaCutOutShader;
+	Shader skyboxShader;
+
+	Model* skyBox;
 
 	Camera* camera;
 

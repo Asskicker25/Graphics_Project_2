@@ -28,8 +28,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Shader\DebugOutlineShader.shader" />
-    <None Include="res\Shader\LightShader.shader" />
     <None Include="res\Shader\Shader.shader" />
+    <None Include="res\Shader\SolidColorShader.shader" />
+    <None Include="res\Shader\UVAnimationShader.shader" />
   </ItemGroup>
 </Project>

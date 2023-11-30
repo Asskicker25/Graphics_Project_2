@@ -116,6 +116,10 @@ void Renderer::SetBackgroundColor(const glm::vec3& backGroundColor)
 
 void Renderer::Draw()
 {
+	glDepthFunc(GL_LEQUAL);
+	skyBox->model->DrawShaded(skyBox->shader);
+	glDepthFunc(GL_LESS);
+
 	ModelAndShader* tempSelectedModel = nullptr;
 
 	for (unsigned int i = 0; i < nonBlendModelAndShaders.size(); i++)
@@ -142,19 +146,22 @@ void Renderer::Draw()
 	}
 
 
-	if (tempSelectedModel == nullptr) return;
+	if (tempSelectedModel != nullptr)
 
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	glStencilMask(0xFF);
-
-	tempSelectedModel->model->Draw(tempSelectedModel->shader);
-
-	if (showNormals)
 	{
-		tempSelectedModel->model->DrawNormals();
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
+
+		tempSelectedModel->model->Draw(tempSelectedModel->shader);
+
+		if (showNormals)
+		{
+			tempSelectedModel->model->DrawNormals();
+		}
+
+		DrawOutline();
 	}
 
-	DrawOutline();
 
 }
 

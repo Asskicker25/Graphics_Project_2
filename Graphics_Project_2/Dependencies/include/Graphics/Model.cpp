@@ -104,11 +104,18 @@ void Model::DrawSolidColor(Shader* shader, glm::vec3 color)
 void Model::DrawShaded(MeshAndMaterial* mesh, Shader* shader)
 {
 	shader->Bind();
-	shader->SetUniformMat("model", transform.GetTransformMatrix());
 
-	shader->SetUniformMat("inverseModel", transform.GetInverseMatrix());
+	if (shader->applyModel)
+	{
+		shader->SetUniformMat("model", transform.GetTransformMatrix());
+	}
 
-	mesh->mesh->DrawShadedMesh(shader, mesh->material, isWireframe);
+	if (shader->applyInverseModel)
+	{
+		shader->SetUniformMat("inverseModel", transform.GetInverseMatrix());
+	}
+
+	mesh->mesh->DrawShadedMesh(shader, mesh->material, false);
 }
 
 void Model::DrawWireframe(MeshAndMaterial* mesh, Shader* shader)
@@ -130,9 +137,21 @@ void Model::DrawNormals(MeshAndMaterial* mesh, Shader* shader)
 
 void Model::DrawNormals()
 {
+	if (!isActive) return;
+
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		DrawNormals(meshes[i], renderer->solidColorShader);
+	}
+}
+
+void Model::DrawShaded(Shader* shader)
+{
+	if (!isActive) return;
+
+	for (unsigned int i = 0; i < meshes.size(); i++)
+	{
+		DrawShaded(meshes[i], shader);
 	}
 }
 
@@ -363,7 +382,7 @@ Texture* Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::s
 		std::string filename = std::string(texString.C_Str());
 		filename = directory + '/' + filename;
 
-		if (Texture::fileExists(filename))
+		if (fileExists(filename))
 		{
 			Texture* texture = new Texture(filename);
 

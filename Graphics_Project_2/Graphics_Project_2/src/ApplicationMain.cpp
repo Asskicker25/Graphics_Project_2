@@ -314,7 +314,8 @@ void ReadFile(const std::string& filePath)
 
 			if (section == "Camera")
 			{
-				application.camera->cameraPos = glm::vec3(values[0], values[1], values[2]);
+				application.cameraPos =  glm::vec3(values[0], values[1], values[2]);
+				//application.camera->cameraPos = glm::vec3(values[0], values[1], values[2]);
 			}
 			else
 			{
@@ -346,8 +347,10 @@ void ReadFile(const std::string& filePath)
 			}
 			if (section == "Camera")
 			{
-				application.camera->cameraPitch = values[0];
-				application.camera->cameraYaw = values[1];
+				application.cameraPitch = values[0];
+				application.cameraYaw = values[1];
+				/*application.camera->cameraPitch = values[0];
+				application.camera->cameraYaw = values[1];*/
 			}
 			else
 			{

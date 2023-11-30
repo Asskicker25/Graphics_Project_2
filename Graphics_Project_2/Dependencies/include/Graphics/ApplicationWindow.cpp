@@ -3,6 +3,7 @@
 ApplicationWindow::ApplicationWindow()
 {
 	camera = new Camera();
+
 }
 
 ApplicationWindow::~ApplicationWindow()
@@ -75,33 +76,51 @@ void ApplicationWindow::InitializeWindow(int windowWidth, int windowHeight)
 		Debugger::Print("GLAD Initialized Successfully");
 	}
 
+	skyBox = new Model("res/Models/DefaultCube.fbx", false);
+	skyBox->meshes[0]->material = new SkyBoxMaterial();
+
+	SkyBoxMaterial* skyBoxMaterial = skyBox->meshes[0]->material->AsSkyBoxMaterial();
+
+	skyBoxMaterial->skyBoxTexture->LoadTexture({
+		"res/Textures/SkyBox/Right.jpg",
+		"res/Textures/SkyBox/Left.jpg",
+		"res/Textures/SkyBox/Up.jpg",
+		"res/Textures/SkyBox/Down.jpg",
+		"res/Textures/SkyBox/Front.jpg",
+		"res/Textures/SkyBox/Back.jpg",
+		});
+
+	skyboxShader.LoadShader("res/Shader/SkyBox.shader");
+	skyboxShader.applyModel = false;
+	Debugger::Print("SkyboxShader  Id : ", skyboxShader.GetShaderId());
+
 	solidColorShader.LoadShader("res/Shader/SolidColorShader.shader");
 	Debugger::Print("SolidColorShader  Id : ", solidColorShader.GetShaderId());
 
 	defShader.LoadShader("res/Shader/Shader.shader");
 	Debugger::Print("DefShader Shader Id : ", defShader.GetShaderId());
+	defShader.applyInverseModel = true;
 
 	alphaBlendShader.LoadShader("res/Shader/Shader.shader");
 	Debugger::Print("TranparentShader Shader Id : ", alphaBlendShader.GetShaderId());
 	alphaBlendShader.blendMode = ALPHA_BLEND;
+	alphaBlendShader.applyInverseModel = true;
 
 	alphaCutOutShader.LoadShader("res/Shader/Shader.shader");
 	Debugger::Print("AlphaCutOutShader Shader Id : ", alphaCutOutShader.GetShaderId());
 	alphaCutOutShader.blendMode = ALPHA_CUTOUT;
-
+	alphaCutOutShader.applyInverseModel = true;
 
 	renderer.solidColorShader = &solidColorShader;
 	renderer.camera = camera;
 
-	/*debugRenderer.solidColorShader = &solidColorShader;
-	debugRenderer.camera = camera;*/
 
 	debugCubes = new DebugModels("res/Models/DefaultCube.fbx");
 	renderer.debugCubes = debugCubes;
-	//debugRenderer.debugCubes = debugCubes;
+
+	renderer.skyBox = new ModelAndShader({ skyBox,&skyboxShader });
 
 	renderer.Initialize();
-	//debugRenderer.Initialize();
 
 	camera->SetCameraHeight(windowHeight);
 	camera->SetCameraWidth(windowWidth);
@@ -161,6 +180,11 @@ void ApplicationWindow::Render()
 		alphaCutOutShader.SetUniformMat("projection", camera->GetMatrix());
 		alphaCutOutShader.SetUniformMat("view", view);
 		alphaCutOutShader.SetUniform3f("viewPos", camera->cameraPos.x, camera->cameraPos.y, camera->cameraPos.z);
+
+		view = glm::mat4(glm::mat3(view));
+		skyboxShader.Bind();
+		skyboxShader.SetUniformMat("projection", camera->GetMatrix());
+		skyboxShader.SetUniformMat("view", view);
 
 		renderer.Draw();
 		//debugRenderer.Draw();

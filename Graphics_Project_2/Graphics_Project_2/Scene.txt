@@ -1,0 +1,77 @@
+#Camera
+Position : { 0 , 0 , 30 }
+Rotation : { 0 , -90 , 0.0 }
+
+//Table Light
+#Light 
+Type : { Point }
+Color : { 1.0 , 1.0 , 1.0 , 1.0}
+Position : { 0.0 , 0.0 , 0.0 }
+Rotation : { 0.0 , 0.0 , 0.0 }
+Intensity : { 1.0 }
+Radius : { 1.0 }
+
+////Clock Light
+//#Light 
+//Type : { Point }
+//Color : { 0.2 , 0.8 , 0.9 , 1.0 }
+//Position : { 18.0 , 10.0 , -12.0 }
+//Rotation : { 0.0 , 0.0 , 0.0 }
+//Intensity : { 0.5 }
+//Radius : { 0.3 }
+//
+////Fireplace Light
+//#Light 
+//Type : { Point }
+//Color : { 0.9 , 0.4 , 0.3 , 1.0 }
+//Position : { 20.0 , 5.0 , 0.0 }
+//Rotation : { 0.0 , 0.0 , 0.0 }
+//Intensity : { 1.5 }
+//Radius : { 0.1 }
+//
+////PhotoFrame Light
+//#Light 
+//Type : { Point }
+//Color : { 0.9 , 0.25 , 0.9 , 1.0 }
+//Position : { -18.0 , 10.0 , -20.0 }
+//Rotation : { 0.0 , 0.0 , 0.0 }
+//Intensity : { 0.5 }
+//Radius : { 0.2 }
+//
+////Red Light
+//#Light 
+//Type : { Spot }
+//Color : { 1.0 , 0.0 , 0.0 , 1.0 }
+//Position : { 21.0 , 18.0 , -22.0 }
+//Rotation : { 90.0 , 180.0 , 0.0 }
+//Intensity : { 1.0 }
+//Radius : { 1.0 }
+//InnerOuterAngle : { 15.0, 25.0 }
+//
+////Green Light
+//#Light 
+//Type : { Spot }
+//Color : { 0.0 , 1.0 , 0.0 , 1.0 }
+//Position : { -18.0 , 17.0 , -10.0 }
+//Rotation : { 60.0 , 180.0 , 0.0 }
+//Intensity : { 2.0 }
+//Radius : { 3.0 }
+//InnerOuterAngle : { 20.0, 25.0 }
+//
+////Blue Light
+//#Light 
+//Type : { Spot }
+//Color : { 0.0 , 0.0 , 1.0, 1.0 }
+//Position : { 0.0 , 15.0 , 8.0 }
+//Rotation : { 25.0 , 180.0 , 0.0 }
+//Intensity : { 1.0 }
+//Radius : { 1.0 }
+//InnerOuterAngle : { 10.0, 15.0 }
+
+//#Model
+//Model path : { Assets/Models/Riaper/Floor.fbx }
+//Model Id : { Floor }
+//Position : { 0.0 , 0.0 , 0.0 }
+//Rotation : { 0.0 , 0.0 , 0.0 }
+//Scale : { 1.0 , 1.0 , 1.0 }
+

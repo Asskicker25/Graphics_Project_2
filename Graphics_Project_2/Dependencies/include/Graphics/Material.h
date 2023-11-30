@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "BaseMaterial.h"
 
+
 enum AmbientType
 {
 	Value,
@@ -19,6 +20,7 @@ private:
 	glm::vec4 ambientColor;
 
 public:
+
 	Texture* diffuseTexture;
 	Texture* specularTexture;
 	Texture* alphaMask;

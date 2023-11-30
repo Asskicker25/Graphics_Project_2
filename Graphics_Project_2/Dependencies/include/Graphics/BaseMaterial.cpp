@@ -1,6 +1,7 @@
 #include "BaseMaterial.h"
 #include "Material.h"
 #include "UnlitColorMaterial.h"
+#include "SkyBoxMaterial.h"
 
 Material* BaseMaterial::AsMaterial()
 {
@@ -10,4 +11,9 @@ Material* BaseMaterial::AsMaterial()
 UnlitColorMaterial* BaseMaterial::AsUnlitMaterial()
 {
 	return (UnlitColorMaterial*)this;
+}
+
+SkyBoxMaterial* BaseMaterial::AsSkyBoxMaterial()
+{
+	return (SkyBoxMaterial*)this;
 }

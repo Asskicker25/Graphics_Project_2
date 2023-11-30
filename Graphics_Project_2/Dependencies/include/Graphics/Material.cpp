@@ -5,6 +5,7 @@ Material::Material()
 	ambientType = AmbientType::Value;
 	ambientColor = glm::vec4(1.0f);
 	baseColor = glm::vec4(1.0f);
+
 	ResetMaterial();
 }
 

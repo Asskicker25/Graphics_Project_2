@@ -4,6 +4,7 @@
 
 class Material;
 class UnlitColorMaterial;
+class SkyBoxMaterial;
 
 
 class BaseMaterial
@@ -15,5 +16,7 @@ public:
 
 	Material* AsMaterial();
 	UnlitColorMaterial* AsUnlitMaterial();
+	SkyBoxMaterial* AsSkyBoxMaterial();
+
 };
 

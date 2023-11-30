@@ -15,6 +15,10 @@ public:
 	std::vector<std::string> modelPaths;
 	std::vector<Light*> listOfLights;
 
+	glm::vec3 cameraPos;
+	float cameraPitch;
+	float cameraYaw;
+
 	// Inherited via ApplicationWindow
 	void SetUp() override;
 	void PreRender() override;

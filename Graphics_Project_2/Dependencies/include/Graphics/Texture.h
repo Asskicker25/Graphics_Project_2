@@ -1,21 +1,7 @@
 #pragma once
 
-#include "Debugger.h"
 #include <stbi/stb_image.h>
-
-struct Image
-{
-	unsigned char* pixelData;
-	int width;
-	int height;
-	int bpp;
-	GLenum format;
-
-	Image() : width{ 0 }, height{ 0 }, bpp{ 0 }, pixelData{ nullptr }
-	{
-	}
-};
-
+#include "Image.h"
 
 class Texture
 {
@@ -24,7 +10,6 @@ private:
 
 public:
 
-	static bool fileExists(const std::string& path);
 	unsigned int renderedID;
 	std::string type;
 	std::string path;

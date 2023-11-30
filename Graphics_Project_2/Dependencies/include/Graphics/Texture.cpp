@@ -1,12 +1,5 @@
 #include "Texture.h"
 
-
-bool Texture::fileExists(const std::string& path)
-{
-	std::ifstream file(path);
-	return file.good();
-}
-
 void Texture::LoadImage(const char* path, Image& image)
 {
 	int width, height, channels;

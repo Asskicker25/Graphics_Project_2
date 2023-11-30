@@ -58,6 +58,8 @@ public:
 	Material* wireframeMaterial;
 	Material* normalsMaterial;
 
+	ModelAndShader* skyBox;
+
 	DebugModels* debugCubes;
 
 	RenderMode renderMode = SHADED;

@@ -39,6 +39,7 @@ public:
 
 	void LoadModel(const std::string& path, bool loadTextures = true);
 	void DrawNormals();
+	void DrawShaded(Shader* shader);
 
 	bool loadTextures;
 

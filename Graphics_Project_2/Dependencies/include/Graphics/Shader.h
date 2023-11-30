@@ -32,6 +32,9 @@ private:
 public:
 	BlendMode blendMode;
 
+	bool applyInverseModel = false;
+	bool applyModel = true;
+
 	Shader();
 	Shader(const std::string& path, BlendMode transparentMode = OPAQUE);
 	~Shader();
