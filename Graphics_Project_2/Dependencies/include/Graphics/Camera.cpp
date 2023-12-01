@@ -67,6 +67,30 @@ void Camera::ChangeCameraType(ECameraType type)
 	SetCameraProjection();
 }
 
+void Camera::SetCameraPosition(const glm::vec3& pos)
+{
+	cameraPos = pos;
+}
+
+void Camera::SetCameraRotation(const glm::vec3& rot)
+{
+	cameraPitch = rot.x;
+	cameraYaw = rot.y;
+
+	SetCameraForward();
+}
+
+void Camera::SetCameraForward()
+{
+	glm::vec3 direction;
+
+	direction.x = glm::cos(glm::radians(cameraYaw)) * glm::cos(glm::radians(cameraPitch));
+	direction.y = glm::sin(glm::radians(cameraPitch));
+	direction.z = glm::sin(glm::radians(cameraYaw)) * glm::cos(glm::radians(cameraPitch));
+
+	cameraFront = glm::normalize(direction);
+}
+
 void Camera::SetCameraWidth(const float& width)
 {
 	this->cameraWidth = width;

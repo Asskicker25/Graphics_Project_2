@@ -31,6 +31,11 @@ public:
 	void InitializeCamera();
 	void ChangeCameraType(ECameraType type);
 
+	void SetCameraPosition(const glm::vec3& pos);
+	void SetCameraRotation(const glm::vec3& rot);
+
+	void SetCameraForward();
+
 	void SetCameraWidth(const float& width);
 	void SetCameraHeight(const float& height);
 

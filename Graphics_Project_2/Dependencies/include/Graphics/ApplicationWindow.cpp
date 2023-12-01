@@ -136,8 +136,6 @@ void ApplicationWindow::Render()
 {
 	SetUp();
 
-	CalculateCameraForward();
-
 	lastFrameTime = glfwGetTime();
 
 	while (!glfwWindowShouldClose(window))
@@ -221,16 +219,6 @@ void ApplicationWindow::SetBackgroundColor(const glm::vec3& color)
 	renderer.SetBackgroundColor(color);
 }
 
-void ApplicationWindow::CalculateCameraForward()
-{
-	glm::vec3 direction;
-
-	direction.x = glm::cos(glm::radians(camera->cameraYaw)) * glm::cos(glm::radians(camera->cameraPitch));
-	direction.y = glm::sin(glm::radians(camera->cameraPitch));
-	direction.z = glm::sin(glm::radians(camera->cameraYaw)) * glm::cos(glm::radians(camera->cameraPitch));
-
-	camera->cameraFront = glm::normalize(direction);
-}
 
 void ApplicationWindow::GetCursorCallback(GLFWwindow* window, double xpos, double ypos)
 {
@@ -270,7 +258,7 @@ void ApplicationWindow::MoveMouse()
 	camera->cameraYaw += mouseDeltaPos.x * mouseSens;
 	camera->cameraPitch += mouseDeltaPos.y * mouseSens;
 
-	CalculateCameraForward();
+	camera->SetCameraForward();
 }
 
 void ApplicationWindow::MoveCameraKeyBoard(GLFWwindow* window)

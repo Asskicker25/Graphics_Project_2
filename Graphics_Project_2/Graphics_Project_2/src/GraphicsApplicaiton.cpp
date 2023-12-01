@@ -4,7 +4,6 @@
 
 void GraphicsApplicaiton::SetUp()
 {
-
 	renderer.SetNormalsLineScale(glm::vec3(0.01, 3.0, 0.01));
 
 #pragma region Shader
@@ -24,9 +23,8 @@ void GraphicsApplicaiton::SetUp()
 
 
 	camera->InitializeCamera(PERSPECTIVE, windowWidth, windowHeight, 0.1f, 300.0f, 65.0f);
-	camera->cameraPos = cameraPos;
-	camera->cameraPitch = cameraPitch;
-	camera->cameraYaw = cameraYaw;
+	camera->SetCameraPosition(listOfCameraTransforms[cameraPresetIndex]->position);
+	camera->SetCameraRotation(listOfCameraTransforms[cameraPresetIndex]->rotation);
 	moveSpeed = 50;
 
 	renderer.renderMode = SHADED;
@@ -113,6 +111,7 @@ void GraphicsApplicaiton::SetUp()
 			renderer.AddModel(modelData->model, &alphaCutOutShader);
 		}
 
+
 		SetSelectedModelIndex(index);
 
 		index++;
@@ -195,9 +194,17 @@ void GraphicsApplicaiton::KeyCallBack(GLFWwindow* window, int& key, int& scancod
 		{
 			renderer.renderMode = SHADED_WIREFRAME;
 		}
-		else if (key == GLFW_KEY_UP)
+		else if (key == GLFW_KEY_BACKSPACE)
 		{
 			renderer.selectedModel = nullptr;
+		}
+		else if (key == GLFW_KEY_DOWN)
+		{
+			SetCamera(--cameraPresetIndex);
+		}
+		else if (key == GLFW_KEY_UP)
+		{
+			SetCamera(++cameraPresetIndex);
 		}
 	}
 }
@@ -208,15 +215,31 @@ void GraphicsApplicaiton::MouseButtonCallback(GLFWwindow* window, int& button, i
 
 void GraphicsApplicaiton::SetSelectedModelIndex(int index)
 {
-	if (index >= listOfModels.size())
+	if (index >= (int)listOfModels.size())
 	{
 		index = 0;
 	}
-	else if (index <= 0)
+	else if (index < 0)
 	{
 		index = listOfModels.size() - 1;
 	}
 
 	selectedIndex = index;
 	renderer.selectedModel = listOfModels[selectedIndex]->model;
+}
+
+void GraphicsApplicaiton::SetCamera(int index)
+{
+	if (index >= (int)listOfCameraTransforms.size())
+	{
+		index = 0;
+	}
+	else if (index < 0)
+	{
+		index = listOfCameraTransforms.size() - 1;
+	}
+
+	cameraPresetIndex = index;
+	camera->SetCameraPosition(listOfCameraTransforms[cameraPresetIndex]->position);
+	camera->SetCameraRotation(listOfCameraTransforms[cameraPresetIndex]->rotation);
 }

@@ -2,6 +2,11 @@
 Position : { -15 , 60 , -90 }
 Rotation : { -10 , 90 , 0.0 }
 
+#Camera
+Position : { -55 , 35 , -20 }
+Rotation : { -10 , 90 , 0.0 }
+
+
 //Table Light
 #Light 
 Type : { Directional }
@@ -84,6 +89,16 @@ Intensity : { 5 }
 Radius : { 10 }
 InnerOuterAngle : { 30, 40 }
 
+//Fridge Light
+#Light 
+Type : { Spot }
+Color : { 1.0 , 0.9 , 0.5 , 1.0 }
+Position : { -100.0 , 75.0 , -80.0 }
+Rotation : { -90.0 , 0.0 , 0.0 }
+Intensity : { 1 }
+Radius : { 10 }
+InnerOuterAngle : { 30, 40 }
+
 #Model
 Model path : { Assets/Models/FallEggs/WallAndRoof.fbx }
 Model Id : { WallAndFloor }
@@ -103,14 +118,6 @@ Position : { -78 , 21.5 , -11.3 }
 Rotation : { -90.0 , 0.0 , 0.0 }
 Scale : { 100 , 100 , 100 }
 Shader : { Default }
-
-#Model
-Model path : { Assets/Models/FallEggs/Stove.fbx }
-Model Id : { Stove }
-Position : { 0 , 19.82 , -3.03 }
-Rotation : { -90.0 , 0.0 , 0.0 }
-Scale : { 100 , 100 , 100 }
-Shader : { AlphaBlend }
 
 #Model
 Model path : { Assets/Models/FallEggs/WindowFrame.fbx }
@@ -358,4 +365,11 @@ Rotation : { -90 , 0.0 , 0.0 }
 Scale : { 100 , 100 , 100 }
 Shader { UVAnim }
 
+#Model
+Model path : { Assets/Models/FallEggs/Stove.fbx }
+Model Id : { Stove }
+Position : { 0 , 19.82 , -3.03 }
+Rotation : { -90.0 , 0.0 , 0.0 }
+Scale : { 100 , 100 , 100 }
+Shader : { Default }
 

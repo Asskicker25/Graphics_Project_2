@@ -87,7 +87,6 @@ public:
 	virtual void MouseButtonCallback(GLFWwindow* window, int& button, int& action, int& mods) = 0;
 
 	void MouseHeldCallback(GLFWwindow* window, int& button, int& action, int& mods);
-	void CalculateCameraForward();
 };
 
 

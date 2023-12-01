@@ -39,6 +39,7 @@ void ReadFile(const std::string& filePath)
 	ModelData* modelData = nullptr;
 	Model* model = nullptr;
 	Light* light = nullptr;
+	Transform* cameraPreset = nullptr;
 
 	if (!file.is_open())
 	{
@@ -64,9 +65,14 @@ void ReadFile(const std::string& filePath)
 			{
 				application.listOfModels.push_back(modelData);
 			}
+			else if (cameraPreset != nullptr)
+			{
+				application.listOfCameraTransforms.push_back(cameraPreset);
+			}
 
 			model = new Model();
 			light = new Light();
+			cameraPreset = nullptr;
 			modelData = nullptr;
 
 			section = "Light";
@@ -85,9 +91,14 @@ void ReadFile(const std::string& filePath)
 			{
 				application.listOfModels.push_back(modelData);
 			}
+			else if (cameraPreset != nullptr)
+			{
+				application.listOfCameraTransforms.push_back(cameraPreset);
+			}
 
 			light = nullptr;
 			model = nullptr;
+			cameraPreset = nullptr;
 			modelData = new ModelData();
 			section = "Model";
 			continue;
@@ -95,6 +106,14 @@ void ReadFile(const std::string& filePath)
 		else if (line.find("#Camera") != std::string::npos)
 		{
 			section = "Camera";
+
+			if (cameraPreset != nullptr)
+			{
+				application.listOfCameraTransforms.push_back(cameraPreset);
+			}
+
+			cameraPreset = new Transform();
+
 			continue;
 		}
 
@@ -340,7 +359,7 @@ void ReadFile(const std::string& filePath)
 
 			if (section == "Camera")
 			{
-				application.cameraPos = glm::vec3(values[0], values[1], values[2]);
+				cameraPreset->SetPosition(glm::vec3(values[0], values[1], values[2]));
 			}
 			else
 			{
@@ -367,9 +386,7 @@ void ReadFile(const std::string& filePath)
 
 			if (section == "Camera")
 			{
-				application.cameraPitch = values[0];
-				application.cameraYaw = values[1];
-
+				cameraPreset->SetRotation(glm::vec3(values[0], values[1], values[2]));
 			}
 			else
 			{

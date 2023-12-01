@@ -57,6 +57,7 @@ private:
 	float timeElapsed = 0;
 
 	void SetSelectedModelIndex(int index);
+	void SetCamera(int index);
 
 public:
 
@@ -66,12 +67,12 @@ public:
 	std::vector<ModelData*> listOfModels;
 	std::vector<Model*> listOflightModels;
 	std::vector<Light*> listOfLights;
+	std::vector<Transform*> listOfCameraTransforms;
 
 	int selectedIndex = 0;
 
-	glm::vec3 cameraPos;
-	float cameraPitch;
-	float cameraYaw;
+	int cameraPresetIndex = 0;
+	
 
 	// Inherited via ApplicationWindow
 	void SetUp() override;
