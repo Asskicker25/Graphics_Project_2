@@ -1,9 +1,9 @@
 #include "GraphicsApplicaiton.h"
-
-
+#include "Utilities/Lerp.h"
 
 void GraphicsApplicaiton::SetUp()
 {
+
 	renderer.SetNormalsLineScale(glm::vec3(0.01, 3.0, 0.01));
 
 #pragma region Shader
@@ -147,6 +147,7 @@ void GraphicsApplicaiton::PreRender()
 void GraphicsApplicaiton::PostRender()
 {
 	timeElapsed += deltaTime;
+	HandleCameraLerp(deltaTime);
 }
 
 void GraphicsApplicaiton::ProcessInput(GLFWwindow* window)
@@ -170,6 +171,12 @@ void GraphicsApplicaiton::KeyCallBack(GLFWwindow* window, int& key, int& scancod
 {
 	if (action == GLFW_PRESS)
 	{
+		if (key != GLFW_KEY_DOWN && key != GLFW_KEY_UP)
+		{
+			cameraLerp = false;
+			cameraLerpStep = 0;
+		}
+
 		if (key == GLFW_KEY_RIGHT)
 		{
 			SetSelectedModelIndex(++selectedIndex);
@@ -206,11 +213,19 @@ void GraphicsApplicaiton::KeyCallBack(GLFWwindow* window, int& key, int& scancod
 		{
 			SetCamera(++cameraPresetIndex);
 		}
+
+		
 	}
+
 }
 
 void GraphicsApplicaiton::MouseButtonCallback(GLFWwindow* window, int& button, int& action, int& mods)
 {
+	if (action == GLFW_PRESS)
+	{
+		cameraLerp = false;
+		cameraLerpStep = 0;
+	}
 }
 
 void GraphicsApplicaiton::SetSelectedModelIndex(int index)
@@ -240,6 +255,30 @@ void GraphicsApplicaiton::SetCamera(int index)
 	}
 
 	cameraPresetIndex = index;
-	camera->SetCameraPosition(listOfCameraTransforms[cameraPresetIndex]->position);
-	camera->SetCameraRotation(listOfCameraTransforms[cameraPresetIndex]->rotation);
+
+	cameraStartPos.SetPosition(camera->cameraPos);
+	cameraStartPos.SetRotation(glm::vec3( camera->cameraPitch, camera->cameraYaw, 0.0f));
+
+	cameraTargetPos.SetPosition(listOfCameraTransforms[cameraPresetIndex]->position);
+	cameraTargetPos.SetRotation(listOfCameraTransforms[cameraPresetIndex]->rotation);
+
+	cameraLerp = true;
+	cameraLerpStep = 0;
+}
+
+void GraphicsApplicaiton::HandleCameraLerp(float deltaTime)
+{
+	if (!cameraLerp) return;
+
+	cameraLerpStep = calculateT(cameraLerpStep, deltaTime, cameraLerpSpeed); 
+	
+	camera->SetCameraPosition(Lerp(cameraStartPos.position, cameraTargetPos.position, cameraLerpStep));
+	camera->SetCameraRotation(Lerp(cameraStartPos.rotation, cameraTargetPos.rotation, cameraLerpStep));
+
+	if (cameraLerpStep >= 1.0f)
+	{
+		cameraLerp = false;
+		cameraLerpStep = 0;
+	}
+
 }

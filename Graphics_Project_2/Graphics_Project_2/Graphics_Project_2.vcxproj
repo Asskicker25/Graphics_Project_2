@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GraphicsApplicaiton.h" />
+    <ClInclude Include="src\Utilities\Lerp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GraphicsApplicaiton.cpp" />

@@ -56,8 +56,17 @@ private:
 
 	float timeElapsed = 0;
 
+	float cameraLerpStep = 0;
+	float cameraLerpSpeed = 0.5;
+
+	bool cameraLerp = false;
+
+	Transform cameraStartPos;
+	Transform cameraTargetPos;
+
 	void SetSelectedModelIndex(int index);
 	void SetCamera(int index);
+	void HandleCameraLerp(float deltaTime);
 
 public:
 

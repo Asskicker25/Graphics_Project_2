@@ -3,9 +3,32 @@ Position : { -15 , 60 , -90 }
 Rotation : { -10 , 90 , 0.0 }
 
 #Camera
-Position : { -55 , 35 , -20 }
-Rotation : { -10 , 90 , 0.0 }
+Position : { -82 , 38 , -19 }
+Rotation : { -10 , 91.8 , 0.0 }
 
+#Camera
+Position : { -72 , 58 , -14 }
+Rotation : { -13 , 133 , 0.0 }
+
+#Camera
+Position : { -23 , 54 , -6 }
+Rotation : { -2 , 131 , 0.0 }
+
+#Camera
+Position : { -106 , 35.6 , -61.3 }
+Rotation : { -7 , 120 , 0.0 }
+
+#Camera
+Position : { -76.8 , 54.2 , -78.3 }
+Rotation : { -16.6 , 183 , 0.0 }
+
+#Camera
+Position : { -42.4 , 44.7 , -67.6 }
+Rotation : { -25.9 , 273.8 , 0.0 }
+
+#Camera
+Position : { 44 , 30 , -23 }
+Rotation : { -40, 86 , 0.0 }
 
 //Table Light
 #Light 

@@ -18,6 +18,9 @@
     <ClInclude Include="src\GraphicsApplicaiton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utilities\Lerp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GraphicsApplicaiton.cpp">
