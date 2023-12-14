@@ -11,7 +11,7 @@ private:
 	std::vector<Shader*> shaders;
 	Shader* lightShader = nullptr;
 
-	static const unsigned int NUMBER_OF_LIGHTS_IN_USE = 10;
+	static const unsigned int NUMBER_OF_LIGHTS_IN_USE = 15;
 
 public:
 

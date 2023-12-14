@@ -23,8 +23,8 @@ void GraphicsApplicaiton::SetUp()
 
 
 	camera->InitializeCamera(PERSPECTIVE, windowWidth, windowHeight, 0.1f, 300.0f, 65.0f);
-	camera->SetCameraPosition(listOfCameraTransforms[cameraPresetIndex]->position);
-	camera->SetCameraRotation(listOfCameraTransforms[cameraPresetIndex]->rotation);
+	camera->transform.SetPosition(listOfCameraTransforms[cameraPresetIndex]->position);
+	camera->transform.SetRotation(listOfCameraTransforms[cameraPresetIndex]->rotation);
 	moveSpeed = 50;
 
 	renderer.renderMode = SHADED;
@@ -129,12 +129,12 @@ void GraphicsApplicaiton::PreRender()
 	colorMaskShader->Bind();
 	colorMaskShader->SetUniformMat("projection", camera->GetMatrix());
 	colorMaskShader->SetUniformMat("view", view);
-	colorMaskShader->SetUniform3f("viewPos", camera->cameraPos.x, camera->cameraPos.y, camera->cameraPos.z);
+	colorMaskShader->SetUniform3f("viewPos", camera->transform.position.x, camera->transform.position.y, camera->transform.position.z);
 
 	uvAnimationShader->Bind();
 	uvAnimationShader->SetUniformMat("projection", camera->GetMatrix());
 	uvAnimationShader->SetUniformMat("view", view);
-	uvAnimationShader->SetUniform3f("viewPos", camera->cameraPos.x, camera->cameraPos.y, camera->cameraPos.z);
+	uvAnimationShader->SetUniform3f("viewPos", camera->transform.position.x, camera->transform.position.y, camera->transform.position.z);
 
 	uvAnimationShader->SetUniform1f("time", timeElapsed);
 
@@ -146,21 +146,21 @@ void GraphicsApplicaiton::PreRender()
 
 void GraphicsApplicaiton::PostRender()
 {
-	timeElapsed += deltaTime;
-	HandleCameraLerp(deltaTime);
+	timeElapsed += Timer::GetInstance().deltaTime;
+	HandleCameraLerp(Timer::GetInstance().deltaTime);
 }
 
 void GraphicsApplicaiton::ProcessInput(GLFWwindow* window)
 {
 	std::stringstream ssTitle;
 	ssTitle << "Camera Pos : "
-		<< camera->cameraPos.x << " , "
-		<< camera->cameraPos.y << " , "
-		<< camera->cameraPos.z
+		<< camera->transform.position.x << " , "
+		<< camera->transform.position.y << " , "
+		<< camera->transform.position.z
 		<< "  Camera Pitch : "
-		<< camera->cameraPitch
+		<< camera->transform.rotation.x
 		<< "  Camera Yaw : "
-		<< camera->cameraYaw;
+		<< camera->transform.rotation.y;
 
 	std::string theTitle = ssTitle.str();
 
@@ -256,8 +256,8 @@ void GraphicsApplicaiton::SetCamera(int index)
 
 	cameraPresetIndex = index;
 
-	cameraStartPos.SetPosition(camera->cameraPos);
-	cameraStartPos.SetRotation(glm::vec3( camera->cameraPitch, camera->cameraYaw, 0.0f));
+	cameraStartPos.SetPosition(camera->transform.position);
+	cameraStartPos.SetRotation(glm::vec3( camera->transform.rotation.x, camera->transform.rotation.y, 0.0f));
 
 	cameraTargetPos.SetPosition(listOfCameraTransforms[cameraPresetIndex]->position);
 	cameraTargetPos.SetRotation(listOfCameraTransforms[cameraPresetIndex]->rotation);
@@ -272,8 +272,8 @@ void GraphicsApplicaiton::HandleCameraLerp(float deltaTime)
 
 	cameraLerpStep = calculateT(cameraLerpStep, deltaTime, cameraLerpSpeed); 
 	
-	camera->SetCameraPosition(Lerp(cameraStartPos.position, cameraTargetPos.position, cameraLerpStep));
-	camera->SetCameraRotation(Lerp(cameraStartPos.rotation, cameraTargetPos.rotation, cameraLerpStep));
+	camera->transform.SetPosition(Lerp(cameraStartPos.position, cameraTargetPos.position, cameraLerpStep));
+	camera->transform.SetRotation(Lerp(cameraStartPos.rotation, cameraTargetPos.rotation, cameraLerpStep));
 
 	if (cameraLerpStep >= 1.0f)
 	{

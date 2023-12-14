@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Debugger.h"
+#include "Transform.h"
 
 enum ECameraType
 {
@@ -20,9 +21,12 @@ private:
 
 	glm::mat4 cameraMatrix;
 
+
 	void SetCameraProjection();
 
 public:
+	Transform transform;
+
 	Camera();
 	Camera(ECameraType _cameraType, float _cameraWidth, float _cameraHeight, float _nearPlane, float _farPlane, float _fov);
 	Camera(ECameraType _cameraType, float _cameraWidth, float _cameraHeight, float _nearPlane, float _farPlane);
@@ -31,22 +35,19 @@ public:
 	void InitializeCamera();
 	void ChangeCameraType(ECameraType type);
 
-	void SetCameraPosition(const glm::vec3& pos);
-	void SetCameraRotation(const glm::vec3& rot);
+	//void SetCameraPosition(const glm::vec3& pos);
+	//void SetCameraRotation(const glm::vec3& rot);
 
 	void SetCameraForward();
 
 	void SetCameraWidth(const float& width);
 	void SetCameraHeight(const float& height);
 
+	Transform* GetTransform();
+
+	glm::mat4 GetViewMatrix();
+
 	inline glm::mat4 GetMatrix() const { return cameraMatrix; }
-
-	float cameraPitch{ 0 };
-	float cameraYaw{ -90.0f };
-
-	glm::vec3 cameraPos{ 0.0f,0.0f,3.0f };
-	glm::vec3 cameraFront{ 0.0f,0.0f,-1.0f };
-	glm::vec3 cameraUp{ 0.0f, 1.0f, 0.0f };
 
 };
 

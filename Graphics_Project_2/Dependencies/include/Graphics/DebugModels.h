@@ -2,6 +2,7 @@
 
 #include "Debugger.h"
 #include "Model.h"
+#include "MeshDataHolder.h"
 
 class DebugModels
 {
@@ -13,10 +14,11 @@ private:
 	std::vector<Model*> listOfModels;
 
 	Model* placeHolder;
-	Renderer* renderer;
+	MeshDataHolder meshData;
 
 public:
 	DebugModels(const std::string& path);
+	DebugModels(MeshDataHolder& meshData);
 
 	void Initialize();
 	void GrowList();

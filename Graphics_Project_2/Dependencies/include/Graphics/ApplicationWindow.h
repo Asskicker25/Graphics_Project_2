@@ -17,6 +17,8 @@
 #include "UnlitColorMaterial.h"
 #include "CubeMapTexture.h"
 #include "SkyBoxMaterial.h"
+#include "DebugCubeData.h"
+#include "Timer.h"
 
 class ApplicationWindow
 {
@@ -29,8 +31,6 @@ private:
 	void GetCursorCallback(GLFWwindow* window, double xpos, double ypos);
 
 public:
-	float deltaTime{ 0 };
-	float lastFrameTime{ 0 };
 	float moveSpeed{ 10.0f };
 	float mouseSens{ 0.1f };
 
@@ -58,7 +58,11 @@ public:
 	Renderer renderer;
 	LightManager lightManager;
 
-	DebugModels* debugCubes;
+	DebugModels* debugCubesModel;
+	DebugModels* debugCubesData;
+	DebugModels* debugSpheres;
+
+	DebugCubeData cubeData;
 
 	Shader solidColorShader;
 	Shader defShader;

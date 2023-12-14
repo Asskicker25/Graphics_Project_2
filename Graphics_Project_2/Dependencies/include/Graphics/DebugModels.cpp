@@ -3,8 +3,17 @@
 
 DebugModels::DebugModels(const std::string& path)
 {
-	this->renderer = renderer;
 	placeHolder = new Model(path,false);
+	placeHolder->isActive = false;
+
+	Initialize();
+}
+
+DebugModels::DebugModels(MeshDataHolder& meshData)
+{
+	this->meshData = meshData;
+	placeHolder = new Model();
+	placeHolder->LoadModel(meshData,false);
 	placeHolder->isActive = false;
 
 	Initialize();

@@ -58,6 +58,12 @@ void Model::Draw(Shader* shader)
 
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
+		if (isWireframe)
+		{
+			DrawWireframe(meshes[i], renderer->solidColorShader);
+			continue;
+		}
+
 		switch (renderer->renderMode)
 		{
 		case SHADED:
@@ -94,11 +100,16 @@ void Model::DrawSolidColor(Shader* shader, glm::vec3 color)
 	for (unsigned int i = 0; i < meshes.size(); i++)
 	{
 		shader->Bind();
-		shader->SetUniformMat("model", transform.GetTransformMatrix());
+		SetModelMatrix(shader);
 
 		meshes[i]->mesh->DrawSolidColorMesh(shader, color);
 
 	}
+}
+
+void Model::SetModelParent(Model* model)
+{
+	parentModel = model;
 }
 
 void Model::DrawShaded(MeshAndMaterial* mesh, Shader* shader)
@@ -107,12 +118,12 @@ void Model::DrawShaded(MeshAndMaterial* mesh, Shader* shader)
 
 	if (shader->applyModel)
 	{
-		shader->SetUniformMat("model", transform.GetTransformMatrix());
+		SetModelMatrix(shader);
 	}
 
 	if (shader->applyInverseModel)
 	{
-		shader->SetUniformMat("inverseModel", transform.GetInverseMatrix());
+		SetInverseModelMatrix(shader);
 	}
 
 	mesh->mesh->DrawShadedMesh(shader, mesh->material, false);
@@ -121,7 +132,7 @@ void Model::DrawShaded(MeshAndMaterial* mesh, Shader* shader)
 void Model::DrawWireframe(MeshAndMaterial* mesh, Shader* shader)
 {
 	shader->Bind();
-	shader->SetUniformMat("model", transform.GetTransformMatrix());
+	SetModelMatrix(shader);
 
 	mesh->mesh->DrawSolidColorMesh(renderer->solidColorShader, renderer->wireframeMaterial->GetBaseColor(), true);
 }
@@ -130,9 +141,23 @@ void Model::DrawWireframe(MeshAndMaterial* mesh, Shader* shader)
 void Model::DrawNormals(MeshAndMaterial* mesh, Shader* shader)
 {
 	shader->Bind();
-	shader->SetUniformMat("model", transform.GetTransformMatrix());
+	SetModelMatrix(shader);
 
 	mesh->mesh->DrawNormals(shader, renderer->normalsMaterial->GetBaseColor(), transform.GetTransformMatrix());
+}
+
+void Model::SetModelMatrix(Shader* shader)
+{
+	shader->SetUniformMat("model", 
+		parentModel == nullptr? transform.GetTransformMatrix():
+		parentModel->transform.GetTransformMatrix() * transform.GetTransformMatrix());
+}
+
+void Model::SetInverseModelMatrix(Shader* shader)
+{
+	shader->SetUniformMat("inverseModel",
+		parentModel == nullptr ? transform.GetInverseMatrix() :
+		parentModel->transform.GetInverseMatrix() * transform.GetInverseMatrix());
 }
 
 void Model::DrawNormals()
@@ -155,6 +180,18 @@ void Model::DrawShaded(Shader* shader)
 	}
 }
 
+void Model::DrawWireframe(const glm::vec3& color)
+{
+	renderer->solidColorShader->Bind();
+	SetModelMatrix(renderer->solidColorShader);
+	
+	for (unsigned int i = 0; i < meshes.size(); i++)
+	{
+		meshes[i]->mesh->DrawSolidColorMesh(renderer->solidColorShader, color, true);
+	}
+	
+}
+
 Model* Model::CopyFromModel(const Model& model)
 {
 	isActive = model.isActive;
@@ -175,6 +212,24 @@ Model* Model::CopyFromModel(const Model& model)
 
 	return this;
 }
+
+
+void Model::LoadModel(MeshDataHolder& meshData, bool loadTextures)
+{
+	this->loadTextures = loadTextures;
+
+	UnlitColorMaterial* meshMat = new UnlitColorMaterial();
+	
+	meshes.push_back(new MeshAndMaterial
+		{ std::make_shared<Mesh>(meshData.vertices, meshData.indices), meshMat });
+
+}
+
+Transform* Model::GetTransform()
+{
+	return &transform;
+}
+
 
 void Model::LoadModel(const std::string& path, bool loadTextures)
 {
@@ -385,7 +440,7 @@ Texture* Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::s
 		if (fileExists(filename))
 		{
 			Texture* texture = new Texture(filename);
-
+			texture->path = texString.C_Str();
 			texture->type = typeName;
 			texturesLoaded.push_back(texture);
 
