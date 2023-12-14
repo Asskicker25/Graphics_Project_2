@@ -188,7 +188,7 @@ void ReadFile(const std::string& filePath)
 			glm::vec4 atten = glm::vec4(0.0f);
 
 			atten.x = 1.0f;
-			atten.z = 0.01;
+			atten.z = 0.001;
 			atten.y = -atten.z * GetFloat(line);
 
 			light->attenuation = atten;

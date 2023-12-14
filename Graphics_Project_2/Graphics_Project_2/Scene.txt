@@ -42,7 +42,7 @@ Type : { Spot }
 Color : { 1.0 , 1.0 , 1.0 , 1.0 }
 Position : { -40.0 , 65.0 , -80.0 }
 Rotation : { -90.0 , 0 , 0.0 }
-Intensity : { 3.0 }
+Intensity : { 1.0 }
 Radius : { 10.0 }
 InnerOuterAngle : { 20.0, 35 }
 
